@@ -8,6 +8,19 @@ Show_cutaway = false;
 
 
 Delta = 0.1;  // tiny adj for neater boolean subtractions
+cylres30 = 30;
+
+module handle_screws() {
+	width = SPONGE_BAR + 8;
+	carriageScrews();
+	translate([CAM_PLATE_WIDTH-10.8,-109,28])
+		cylinder(h=10, d=7, center=true, $fn=cylres30);
+	translate([10.8,-109,28])
+		cylinder(h=10, d=7, center=true, $fn=cylres30);
+	// middle
+	translate([CAM_PLATE_WIDTH-90.8,-109,28])
+		cylinder(h=10, d=7, center=true, $fn=cylres30);
+}
 
 
 module handle_part() {
@@ -52,7 +65,8 @@ module handle_part() {
 module middle_screw() {
 	difference() {
 	translate([0,0,-1])
-		carriageScrews();
+		//carriageScrews();
+		handle_screws();
 		// block left hole
 		translate([0,-140,0])
 			cube([60,60,40]);
@@ -69,7 +83,7 @@ module handle() {
 		// outer screws
 		translate([0,0,-5])
 		scale([1,1,1.5])
-			carriageScrews();
+			handle_screws();
 		// inner screw recess
 		middle_screw();
 	}
