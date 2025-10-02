@@ -29,6 +29,6 @@ difference() {
 
             spongeBar(width = numNeedles*gauge);
     }
-        needleBedScrews();
+        translate([-needleSlotWidth,0,0]) needleBedScrews();
 }
 
