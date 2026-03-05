@@ -22,7 +22,7 @@ difference() {
     translate([gauge*numNeedles/2 - gauge/2, 0, 0])
     
     backCover(width = numNeedles*gauge);
-    needleBedScrews();
+    translate([-needleSlotWidth,0,0]) needleBedScrews();
 }
 
 

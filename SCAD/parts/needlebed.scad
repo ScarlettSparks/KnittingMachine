@@ -19,7 +19,7 @@ module needleBase() {
 }
 
 module needleSlot() {
-    translate([0,-NEEDLE_BED_DEPTH/2, 0])
+    translate([-needleSlotWidth,-NEEDLE_BED_DEPTH/2, 0])
     cube([needleSlotWidth, NEEDLE_BED_DEPTH + 2, needleSlotHeight*2], center = true);
 }
 
@@ -35,13 +35,21 @@ module spongeBarCutout() {
 
 module combCutout() {
     hull() {
-        translate([0,-NEEDLE_BED_DEPTH, 0])    
+        translate([-needleSlotWidth,-NEEDLE_BED_DEPTH, 0])    
         cube([combWidth,(COMB - combWidth)*2,needleSlotHeight * 2], center = true);
-        translate([0,-NEEDLE_BED_DEPTH + (COMB - combWidth), 0])
+        translate([-needleSlotWidth,-NEEDLE_BED_DEPTH + (COMB - combWidth), 0])
         cylinder(h = needleSlotHeight * 2, r = combWidth/2, $fn = 25, center = true);
     }
-    translate([0,-NEEDLE_BED_DEPTH, 0])
+    translate([-needleSlotWidth,-NEEDLE_BED_DEPTH, 0])
         cylinder(h = needleBedHeight * 2 + 1, r = combWidth/2, $fn = 25, center = true);
+    
+    translate([needleSlotWidth,0,0]) hull() {
+        translate([needleSlotWidth,-NEEDLE_BED_DEPTH, 0])    
+        cube([combWidth,(COMB - combWidth)*2,needleSlotHeight * 2], center = true);
+        translate([needleSlotWidth,-NEEDLE_BED_DEPTH + (COMB - combWidth), 0])
+        cylinder(h = needleSlotHeight * 2, r = combWidth/2, $fn = 25, center = true);
+    }
+    translate([needleSlotWidth,0,0]) translate([needleSlotWidth,-NEEDLE_BED_DEPTH, 0]) cylinder(h = needleBedHeight * 2 + 1, r = combWidth/2, $fn = 25, center = true);
 }
 
 module frontAngle(width = gauge) {
@@ -65,7 +73,7 @@ union() {
         #connector();
         translate([-gauge/2 - tolerance,-(NEEDLE_BED_DEPTH-connectorOffset),-needleBedHeight - tolerance])
         #connector();
-        needleBedScrews();
+        translate([-needleSlotWidth,0,0])needleBedScrews();
     }
     translate([gauge*(numNeedles-1)+gauge/2,-connectorOffset,-needleBedHeight])
                 connector(tolerance = tolerance);
@@ -79,7 +87,7 @@ module needleBed() {
         if (i==screwPlacement || i==numNeedles-screwPlacement) {
               translate([gauge*i, 0, 0]) {
               needleUnit(); 
-              spongeBarSpacers();
+              translate([-needleSlotWidth,0,0]) spongeBarSpacers();
               } 
         } else {
             // no spacer
