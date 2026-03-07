@@ -1,8 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="157.23" height="94.56" viewBox="0 0 157.23 94.56">
-  <title>TPointer</title>
-  <g id="Layer_2" data-name="Layer 2">
-    <g id="Tension_adjustment_slot" data-name="Tension adjustment slot">
-      <path d="M153,78.7h0L45.26,16.51C40.76,13.91,0,0,0,0S32.24,28.61,36.76,31.24C62.81,46.4,144.48,93.42,144.48,93.42h0A8.5,8.5,0,1,0,153,78.7ZM41.66,28.08a4.25,4.25,0,1,1,3.55-4.86A4.25,4.25,0,0,1,41.66,28.08Z" fill="#8dc63f" opacity="0.5"/>
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 157.25 94.57">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #8fc640;
+        isolation: isolate;
+        opacity: .5;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Pointer">
+    <path id="TPointer" class="cls-1" d="M153,78.7h0L45.26,16.51C40.76,13.91,0,0,0,0c0,0,32.24,28.61,36.76,31.24,26.05,15.16,107.72,62.18,107.72,62.18h0c4.06,2.35,9.27.96,11.62-3.1,2.35-4.06.96-9.27-3.1-11.62Z"/>
   </g>
 </svg>

@@ -17,14 +17,11 @@ See individual files to export models
 
 // --- LAYOUT: CAMS ---
 
-translate(tCamCoords)
 tCam();
-translate(flip(tCamCoords))
+translate([CAM_PLATE_WIDTH,0,0])
 mirror([1,0,0])
 tCam();
 
-translate(tPivotCoords)
-tPivot(solid = true);
-translate(flip(tPivotCoords))
+translate([CAM_PLATE_WIDTH,0,0])
 mirror([1,0,0])
-tPivot(solid = true); 
+tPointer();

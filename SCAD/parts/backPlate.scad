@@ -63,15 +63,17 @@ module backPlate() {
         translate([0,-CAM_PLATE_DEPTH,camHeight])
         cube([CAM_PLATE_WIDTH, CAM_PLATE_DEPTH, camPlateHeight]);
         
-        translate(tSlotCoords)
-        tSlots();
-        translate(flip(tSlotCoords))
-        mirror([1,0,0])
+        translate(tPivotCoords)
         tSlots();
         
-        translate(tPivotCoords)
-        tPivot(tol = tolerance);
         translate(flip(tPivotCoords))
+        mirror([1,0,0])
+        tSlots();
+           
+        
+//        translate(tPivotCoords)
+        tPivot(tol = tolerance);
+        translate([CAM_PLATE_WIDTH,0,0])
         mirror([1,0,0])
         tPivot(tol = tolerance);
         
@@ -120,13 +122,19 @@ module camRails() {
     }
 }
 
+
 module tSlots() {
     // curved cutout for tension adjustment screws
-        linear_extrude(camPlateHeight + 2)
-        import("../../SVG/TSlot.svg");
+    hull() {
+        for (i = [0:9]) { 
+            rotate([0,0,tensionMarksStartAngle - i*tensionAngleInc])
+            translate([-tSlotDist,0,0])
+            cylinder(camPlateHeight * 2, d = screwDiamSm + tolerance*2, center = true); 
+        }
+    }   
 }
 
-//camRailsInlet(); // debug at origin
+//camRailsInlet(); // uncomment to debug shape at origin
 
 module camRailsInlet() {
     // cutout shape to round off entry to rail track
@@ -142,3 +150,4 @@ module camRailsInlet() {
         cylinder(CAM_PLATE_DEPTH, d = railDepth + tolerance * 2, center = true, $fn = 50);
     }
 }
+
