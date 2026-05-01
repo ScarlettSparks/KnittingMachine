@@ -21,7 +21,8 @@ module tPivot(tol = 0, solid = false) {
         cylinder(camPlateHeight + 3, d = 8 + tol , center = true);
         if(solid) {
             translate([0,0,camPlateHeight/2])
-            #cylinder(camPlateHeight, d = screwDiamSm , center = true);
+            screwPreview()
+            cylinder(camPlateHeight, d = screwDiam , center = true);
         }     
     }
 }

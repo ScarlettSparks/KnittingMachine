@@ -3,10 +3,6 @@ include<params.scad>;
 
 //testPrintM();
 
-#connector();
-connector(tolerance=tolerance);
-echo(needleBedHeight - (needleSlotHeight + 2));
-
 module testPrintF() {
     difference() {
         translate([0,-25/2,0])

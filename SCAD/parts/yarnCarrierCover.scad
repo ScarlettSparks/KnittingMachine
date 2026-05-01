@@ -2,15 +2,15 @@ include<../modules/params.scad>;
 use<../modules/carriageScrews.scad>;
 use<../parts/stripperPlate.scad>;
 
-difference() {
-    color("orchid", 0.5)
-    
-    yarnCarrierCover();
-    yarnCarrierCutout();
-    translate([CAM_PLATE_WIDTH/2,YARN_DEPOSIT_Y + 2 + tolerance,camPlateHeight/2 + 1])
-    cube([CAM_PLATE_WIDTH + 2, (NEEDLE_BED_DEPTH + NEEDLE_EXTENSION + camPlateHeight*1.5)-(NEEDLE_BED_DEPTH - COMB + 6 + tolerance) + 2, camPlateHeight + 2], center = true);        
-    carriageScrews();
-    
+module renderYarnCarrierCover() {
+    difference() {
+        color("orchid", 0.5)
+        yarnCarrierCover();
+        yarnCarrierCutout();
+        translate([CAM_PLATE_WIDTH/2,YARN_DEPOSIT_Y + 2 + tolerance,camPlateHeight/2 + 1])
+        cube([CAM_PLATE_WIDTH + 2, (NEEDLE_BED_DEPTH + NEEDLE_EXTENSION + camPlateHeight*1.5)-(NEEDLE_BED_DEPTH - COMB + 6 + tolerance) + 2, camPlateHeight + 2], center = true);        
+        carriageScrews();
+    }
 }
 
 module yarnCarrierCover() {

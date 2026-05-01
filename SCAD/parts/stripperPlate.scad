@@ -63,8 +63,7 @@ module yarnCarrierCutout() {
 //            cylinder(h = camHeight + camPlateHeight*2, r = 10, center = true);
         }
 }
-
-
+module stripperPlateHalf() {
     difference() {
         translate([CAM_PLATE_WIDTH/2,-NEEDLE_BED_DEPTH - NEEDLE_EXTENSION - tolerance * 2,-needleSlotHeight]) {
             union() {
@@ -76,30 +75,16 @@ module yarnCarrierCutout() {
         // flat edge
         translate([0,-(NEEDLE_BED_DEPTH + NEEDLE_EXTENSION + camPlateHeight + 2), 2])
         cube([CAM_PLATE_WIDTH + 4, camPlateHeight + 2, camPlateHeight + 2], center = false);
-        
-        
         yarnCarrierCutout();
-        
         carriageScrews();
     }
-    
+}
+
+module renderStripperPlate() {
+    stripperPlateHalf();
+
     translate([CAM_PLATE_WIDTH, 0, 0])
     mirror([1,0,0])
-    difference() {
-        translate([CAM_PLATE_WIDTH/2,-NEEDLE_BED_DEPTH - NEEDLE_EXTENSION - tolerance * 2,-needleSlotHeight]) {
-            union() {
-                stripperPlate();
-                stripperPlateNose();
-            }
-        }
-        translate([-1,-tolerance, -tolerance])
-        // flat edge
-        translate([0,-(NEEDLE_BED_DEPTH + NEEDLE_EXTENSION + camPlateHeight + 2), 2])
-        cube([CAM_PLATE_WIDTH + 4, camPlateHeight + 2, camPlateHeight + 2], center = false);
-        
-        
-        yarnCarrierCutout();
-        
-        carriageScrews();
-    }
+    stripperPlateHalf();
+}
 

@@ -1,6 +1,6 @@
 include<../modules/params.scad>;
-use<../modules/needlebedScrews.scad>;
-use<../modules/connector.scad>;
+include<../modules/needlebedScrews.scad>;
+include<../modules/connector.scad>;
 
 module needleUnit() {
     difference() {
@@ -58,19 +58,29 @@ module spongeBarSpacers() {
     translate([-gauge/2,-(NEEDLE_BED_DEPTH-COMB) + 2, -needleSlotHeight/2 - 1 - tolerance])
     cube([gauge/2, 4, needleSlotHeight - 2], center = true);
 }
-union() {
-    difference() {
-        needleBed();
-        translate([-gauge/2 - tolerance,-connectorOffset,-needleBedHeight-tolerance])
-        #connector();
-        translate([-gauge/2 - tolerance,-(NEEDLE_BED_DEPTH-connectorOffset),-needleBedHeight - tolerance])
-        #connector();
-        needleBedScrews();
+module renderNeedlebed(showFemaleConnectors = false) {
+    union() {
+        difference() {
+            needleBed();
+            translate([-gauge/2 - tolerance,-connectorOffset,-needleBedHeight-tolerance])
+            if (showFemaleConnectors) {
+                #connector();
+            } else {
+                connector();
+            }
+            translate([-gauge/2 - tolerance,-(NEEDLE_BED_DEPTH-connectorOffset),-needleBedHeight - tolerance])
+            if (showFemaleConnectors) {
+                #connector();
+            } else {
+                connector();
+            }
+            needleBedScrews();
+        }
+        translate([gauge*(numNeedles-1)+gauge/2,-connectorOffset,-needleBedHeight])
+        connector(tolerance = tolerance);
+        translate([gauge*(numNeedles-1)+gauge/2,-(NEEDLE_BED_DEPTH-connectorOffset),-needleBedHeight])
+        connector(tolerance = tolerance);
     }
-    translate([gauge*(numNeedles-1)+gauge/2,-connectorOffset,-needleBedHeight])
-                connector(tolerance = tolerance);
-                translate([gauge*(numNeedles-1)+gauge/2,-(NEEDLE_BED_DEPTH-connectorOffset),-needleBedHeight])
-                connector(tolerance = tolerance);
 }
     
 

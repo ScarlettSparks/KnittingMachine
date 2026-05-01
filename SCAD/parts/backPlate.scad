@@ -104,7 +104,7 @@ module camRails() {
             translate([CAM_PLATE_WIDTH,-BACK_COVER/2, 0.5])
             mirror([1,0,0])
             camRailsInlet();
-            backRail(width = CAM_PLATE_WIDTH*2 +1, tolerance = -tolerance);
+            backRail(width = CAM_PLATE_WIDTH*2 +1, railTolerance = -tolerance);
         }
         
         difference() {
@@ -115,7 +115,7 @@ module camRails() {
             translate([CAM_PLATE_WIDTH,-(NEEDLE_BED_DEPTH-COMB) + SPONGE_BAR/2, 0.5])
             mirror([1,0,0])
             camRailsInlet();
-            frontRail(width = CAM_PLATE_WIDTH*2 +1, tolerance = -tolerance);
+            frontRail(width = CAM_PLATE_WIDTH*2 +1, railTolerance = -tolerance);
         }
     }
 }

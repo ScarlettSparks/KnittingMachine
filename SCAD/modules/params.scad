@@ -15,31 +15,65 @@ making changes to the cam design in the technical sketch.
 
 $fn = 50;
 
-STANDARD_GAUGE = 4.5;
-MID_GAUGE = 6.5;
-BULKY_GAUGE = 9.0;
+defaultGauge = 4.5;
+defaultNumNeedles = 25;
+defaultTolerance = 0.2;
+defaultScrewPlacement = 3;
+defaultShowScrewPreview = false;
+defaultScrewPreset = "4-40";
+defaultCustomScrewDiam = 2.79;
+defaultCustomScrewHeadDiam = 5.21;
+defaultCustomScrewHeadHeight = 2.41;
+defaultCustomNutHeight = 2.8;
+defaultUseThreadedInserts = false;
+defaultInsertOuterDiam = 4.6;
+defaultInsertLength = 4.0;
+defaultInsertLeadInDiam = 5.2;
+defaultInsertLeadInDepth = 1.2;
 
-gauge = STANDARD_GAUGE; // I recommend using one of the predefined gauges above
-numNeedles = 25;
-tolerance = 0.2; // allows a bit of room for parts that have to fit together; adjust according to your printer's precision
+screwPreset = is_undef(cfaScrewPreset) ? defaultScrewPreset : cfaScrewPreset;
+
+gauge = is_undef(cfaGauge) ? defaultGauge : cfaGauge; // I recommend using one of the predefined gauges above
+numNeedles = is_undef(cfaNumNeedles) ? defaultNumNeedles : cfaNumNeedles;
+tolerance = is_undef(cfaTolerance) ? defaultTolerance : cfaTolerance; // allows a bit of room for parts that have to fit together; adjust according to your printer's precision
+screwPlacement = is_undef(cfaScrewPlacement) ? defaultScrewPlacement : cfaScrewPlacement; // how many needles from edge of bed; min 2, max floor(numNeedles/2)
+showScrewCutouts = is_undef(cfaShowScrewPreview) ? defaultShowScrewPreview : cfaShowScrewPreview;
+useThreadedInserts = is_undef(cfaUseThreadedInserts) ? defaultUseThreadedInserts : cfaUseThreadedInserts;
+
+customScrewDiam = is_undef(cfaScrewDiam) ? defaultCustomScrewDiam : cfaScrewDiam;
+customScrewHeadDiam = is_undef(cfaScrewHeadDiam) ? defaultCustomScrewHeadDiam : cfaScrewHeadDiam;
+customScrewHeadHeight = is_undef(cfaScrewHeadHeight) ? defaultCustomScrewHeadHeight : cfaScrewHeadHeight;
+customNutHeight = is_undef(cfaNutHeight) ? defaultCustomNutHeight : cfaNutHeight;
+insertOuterDiam = is_undef(cfaInsertOuterDiam) ? defaultInsertOuterDiam : cfaInsertOuterDiam;
+insertLength = is_undef(cfaInsertLength) ? defaultInsertLength : cfaInsertLength;
+insertLeadInDiam = is_undef(cfaInsertLeadInDiam) ? defaultInsertLeadInDiam : cfaInsertLeadInDiam;
+insertLeadInDepth = is_undef(cfaInsertLeadInDepth) ? defaultInsertLeadInDepth : cfaInsertLeadInDepth;
 
 // ---
 // Hardware dimensions 
 // (actual measurements, no tolerances)
 
-// - pan head 6-32 machine screws
-screwDiam = 3.45;
-screwHeight = 18;
-screwHeadDiam = 6.75 + tolerance * 2; 
-screwHeadHeight = 2.55 + tolerance * 2;
-nutWidth = 7.9;
+FIXED_SCREW_LENGTH = 14.62;
 
 // - pan head 4-40 machine screws (M3 should also work where these are used)
-screwDiamSm = 2.79;
-screwHeightSm = 14.62;
-screwHeadHeightSm = 2.41 + tolerance * 2;
-screwHeadDiamSm = 5.21 + tolerance * 2;
-nutHeight = 2.8;
+screwDiam =
+    screwPreset == "M3" ? 2.8 :
+    screwPreset == "Custom" ? customScrewDiam :
+    2.79;
+// Keep printed bed height stable across hardware choices and later reprints.
+screwHeight = FIXED_SCREW_LENGTH;
+screwHeadHeight =
+    (screwPreset == "M3" ? 2.4 :
+    screwPreset == "Custom" ? customScrewHeadHeight :
+    2.41) + tolerance * 2;
+screwHeadDiam =
+    (screwPreset == "M3" ? 7 :
+    screwPreset == "Custom" ? customScrewHeadDiam :
+    5.21) + tolerance * 2;
+nutHeight =
+    screwPreset == "M3" ? 2.4 :
+    screwPreset == "Custom" ? customNutHeight :
+    2.8;
 
 // ---
 // Needle dimensions
@@ -74,8 +108,6 @@ YARN_DEPOSIT_Y = -155.1;
 YARN_DEPOSIT_Z = -needleSlotHeight + HOOK_DIAM;
 connectorOffset = 20;
 
-screwPlacement = 3; // how many needles from edge of bed; min 2, max floor(numNeedles/2)
-
 // ---
 // Carriage dimensions
 // refer to technical sketch
@@ -89,7 +121,13 @@ railHeight = 8; // ???
 xOffset = 16.5;
 //vCamScrews = [[34-xOffset, -90.25, 0],[58-xOffset, -74.25, 0],[86-xOffset,-90.25, 0]];
 
-echo(needleSlotHeight);
+module screwPreview() {
+    if (showScrewCutouts) {
+        #children();
+    } else {
+        children();
+    }
+}
 
 
 

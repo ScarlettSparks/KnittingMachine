@@ -2,19 +2,6 @@ include<../modules/params.scad>;
 use<../modules/carriageScrews.scad>;
 use<../parts/stripperPlate.scad>;
 
-translate([CAM_PLATE_WIDTH/2,0,0])
-difference() {
-    yarnFeeder();
-    translate([-CAM_PLATE_WIDTH/2,0,0])
-    yarnSlot();
-}
-difference() {
-    yarnFeederPlate();
-    yarnSlot();
-    carriageScrews();
-}
-
-
 module yarnFeeder() {
     difference() {
         // yarn guide
@@ -59,5 +46,20 @@ module yarnFeederPlate() {
         }
         translate([CAM_PLATE_WIDTH/2,YARN_DEPOSIT_Y,2])
         cylinder(h= (5)*2, d = 19 , center = true);
+    }
+}
+
+module renderYarnFeeder() {
+    translate([CAM_PLATE_WIDTH/2,0,0])
+    difference() {
+        yarnFeeder();
+        translate([-CAM_PLATE_WIDTH/2,0,0])
+        yarnSlot();
+    }
+
+    difference() {
+        yarnFeederPlate();
+        yarnSlot();
+        carriageScrews();
     }
 }
