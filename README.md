@@ -1,4 +1,4 @@
-# > WIP - Do not merge into `main` - Experimental changes
+# WIP - Experimental changes
 
 # A 3D-printable flatbed knitting machine
 
