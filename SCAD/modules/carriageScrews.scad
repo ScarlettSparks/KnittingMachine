@@ -91,20 +91,3 @@ module yarnFeederPlateCounterborePositions() {
         }
     }
 }
-
-module carriageScrews() {
-    carriageBackPlateScrewPositions()
-    cylinder(h= 12*2, d = screwDiam, center = true);
-
-    stripperPlateScrewPositions()
-    cylinder(h= screwHeight, d = screwDiam, center = true);
-
-    stripperPlateCounterborePositions()
-    cylinder(h= screwHeadHeight, d = screwHeadDiam, center = true);
-
-    yarnFeederPlateScrewPositions()
-    cylinder(h= screwHeight-2, d = 2.8, center = false);
-
-    yarnFeederPlateCounterborePositions()
-    cylinder(h= screwHeadHeight + tolerance, d = screwHeadDiam, center = false);
-}

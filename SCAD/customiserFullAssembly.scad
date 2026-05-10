@@ -1,7 +1,7 @@
 cfaTolerance = 0.2;
 
 /* [Screw Options] */
-cfaShowScrewPreview = false;
+cfaShowScrewPreview = true;
 cfaScrewPreset = "4-40"; // [4-40, M3, Custom]
 cfaScrewDiam = 2.79;
 cfaScrewHeadDiam = 5.21;
@@ -9,7 +9,7 @@ cfaScrewHeadHeight = 2.41;
 cfaNutHeight = 2.8;
 
 /* [Insert Options] */
-cfaUseThreadedInserts = false;
+cfaUseThreadedInserts = true;
 cfaInsertOuterDiam = 4.6;
 cfaInsertLength = 4.0;
 cfaInsertLeadInDiam = 5.2;
@@ -18,7 +18,7 @@ cfaInsertLeadInDepth = 1.2;
 /* [Needlebed Options] */
 cfaRenderNeedlebedAssembly = true;
 cfaRenderNeedlebedPart = true;
-cfaRenderBackCoverPart = true;
+cfaRenderBackCoverPart = false;
 cfaRenderSpongeBarPart = true;
 cfaGauge = 4.5; // [4.5:Standard, 6.5:Mid, 9.0:Bulky]
 cfaNumNeedles = 25;

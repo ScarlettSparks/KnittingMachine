@@ -1,7 +1,7 @@
 include<../modules/params.scad>;
-include<../parts/stripperPlate.scad>;
-include<../parts/yarnCarrierCover.scad>;
-include<../parts/yarnFeeder.scad>;
+include<../modules/stripperPlate.scad>;
+include<../modules/yarnCarrierCover.scad>;
+include<../modules/yarnFeeder.scad>;
 
 /* 
 Full yarn carrier (fairing) assembly for layout and debugging

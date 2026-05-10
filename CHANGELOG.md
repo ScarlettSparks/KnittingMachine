@@ -1,6 +1,73 @@
 # CHANGELOG
 
-## Unreleased — Compared with `main`
+## 10/05/26 - Compared with `main`
+
+Summary of functional changes in the working tree:
+
+### TLDR:
+- Parts were moved into `SCAD/modules/` and `SCAD/parts/` now acts as render/debug wrappers.
+- Screw geometry was centralized in shared fastener helpers; screw-location files now control positions only.
+- Initial needlebed insert support was added and tuned per screw group.
+- README customiser and fastener documentation was corrected and expanded.
+
+### 1. Part/module structure reorganized
+- Moved reusable part implementations into `SCAD/modules/`.
+- Converted `SCAD/parts/` files into thin render/debug entry points.
+- Updated assemblies to include or use module files directly:
+  - [SCAD/assemblies/needlebedAssembly.scad](SCAD/assemblies/needlebedAssembly.scad)
+  - [SCAD/assemblies/camplate.scad](SCAD/assemblies/camplate.scad)
+  - [SCAD/assemblies/yarnCarrierAssembly.scad](SCAD/assemblies/yarnCarrierAssembly.scad)
+- Added standalone debug wrapper for [SCAD/parts/needlebedScrews.scad](SCAD/parts/needlebedScrews.scad).
+
+### 2. Screw and fastener refactor
+- Expanded [SCAD/modules/fasteners.scad](SCAD/modules/fasteners.scad) with shared screw-cut helpers:
+  - `fastenerCounterbore(...)`
+  - `fastenerScrewCutout(...)`
+  - `fastenerScrewCutoutWithInsert(...)`
+- Reduced [SCAD/modules/needlebedScrews.scad](SCAD/modules/needlebedScrews.scad) and [SCAD/modules/carriageScrews.scad](SCAD/modules/carriageScrews.scad) to position-only responsibilities.
+- Rewired needlebed, sponge bar, back cover, and carriage-related modules to combine position modules with shared fastener geometry instead of bundled screw emitters.
+- Corrected screw-head recess depth/placement so the head preview sits flush with the part top face.
+- Set the screw through-hole length to use the configured `screwHeight`.
+
+### 3. Needlebed screw layout and insert work
+- Simplified the needlebed screw layout to two Y zones:
+  - sponge bar
+  - back rail / back cover
+- Removed the older extra rear/back-cover screw positions.
+- Split needlebed screw groups into sponge-bar and back-cover position helpers so insert handling can vary by group.
+- Added per-group insert-offset logic in [SCAD/modules/needlebedScrews.scad](SCAD/modules/needlebedScrews.scad).
+- Tuned sponge-bar and back-cover insert offsets using existing model dimensions instead of only ad hoc constants.
+- Restored correct handed pairing so there are four screw positions rather than duplicated left/right offsets at each end.
+
+### 4. Back cover and needlebed alignment adjustments
+- Moved back cover implementation to [SCAD/modules/backCover.scad](SCAD/modules/backCover.scad) and left [SCAD/parts/backCover.scad](SCAD/parts/backCover.scad) as a render wrapper.
+- Updated back-cover screw handling to use the shared needlebed screw-position and fastener pipeline.
+- Kept screw-location logic centralized in [SCAD/modules/needlebedScrews.scad](SCAD/modules/needlebedScrews.scad) rather than in individual receiving parts.
+
+### 5. Documentation
+- Removed README wording that incorrectly implied screw lengths are customiser-controlled.
+- Expanded README documentation to include the currently exposed customiser parameters from [SCAD/customiserFullAssembly.scad](SCAD/customiserFullAssembly.scad).
+
+## Files added
+- [SCAD/modules/backCover.scad](SCAD/modules/backCover.scad)
+- [SCAD/modules/backPlate.scad](SCAD/modules/backPlate.scad)
+- [SCAD/modules/carriageRest.scad](SCAD/modules/carriageRest.scad)
+- [SCAD/modules/clampHead.scad](SCAD/modules/clampHead.scad)
+- [SCAD/modules/clampUnit.scad](SCAD/modules/clampUnit.scad)
+- [SCAD/modules/needlebed.scad](SCAD/modules/needlebed.scad)
+- [SCAD/modules/spongeBar.scad](SCAD/modules/spongeBar.scad)
+- [SCAD/modules/stripperPlate.scad](SCAD/modules/stripperPlate.scad)
+- [SCAD/modules/tCam.scad](SCAD/modules/tCam.scad)
+- [SCAD/modules/tPointer.scad](SCAD/modules/tPointer.scad)
+- [SCAD/modules/yarnCarrierCover.scad](SCAD/modules/yarnCarrierCover.scad)
+- [SCAD/modules/yarnFeeder.scad](SCAD/modules/yarnFeeder.scad)
+- [SCAD/parts/needlebedScrews.scad](SCAD/parts/needlebedScrews.scad)
+
+
+
+---
+
+## 01/05/26 — Compared with `main`
 
 Summary of functional changes in the working tree:
 
@@ -73,5 +140,3 @@ Summary of functional changes in the working tree:
 - [SCAD/assemblies/yarnCarrierAssembly.scad](SCAD/assemblies/yarnCarrierAssembly.scad)
 
 ## Files removed
-
-

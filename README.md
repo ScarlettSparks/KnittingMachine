@@ -31,7 +31,6 @@ In this project, you will find several types of file:
     - **Customiser parameters** (set in the OpenSCAD Customiser panel):
       - Needle count & gauge (4.5mm standard, 6.5mm, 9mm, custom).
       - Screw family (imperial #4-40, metric M3, custom).
-      - Screw lengths (per-part, overridable).
       - Threaded inserts (toggle on/off).
       - Part toggles (select which components to render/export).
     - The underlying code is organized into **parts** (individual render modules), **assemblies** (multi-part groupings), and **modules** (shared utilities).
@@ -77,7 +76,7 @@ You will also need:
 
 - latch-hook knitting machine needles (KR830 / KR838 / KR850), one per needlebed slot for each bed
 - self-adhesive foam weatherstrip (or similar; for sponge bar), 1/4" - 3/8" wide, enough length to span all connected needlebeds, plus a small trimming allowance
-- machine screws: choose your preferred family — **imperial** (#4-40), **metric** (M3), or **custom**. Select screw family and set per-part lengths in the customiser.
+- machine screws: choose your preferred family — **imperial** (#4-40), **metric** (M3), or **custom**; see the recommended lengths in [Fastener specifications](#fastener-specifications).
 - screwdriver
 - scissors or utility knife (to cut foam weatherstrip)
 - NOTE: I have been using a 5/16" x 3.5" metal eyebolt in the clamp; the eye is easy to grab and turn without a tool, but not essential. You will need a longer bolt if you choose the "deep" clamp option. If you choose to generate 3D printed bolts for your clamp with an external library, a bolt with an 8mm OD and 12mm nut (between flats) should fit the other connected parts.
@@ -229,13 +228,7 @@ All screw specifications are customizable in [SCAD/customiserFullAssembly.scad](
 
 1. Open `SCAD/customiserFullAssembly.scad`.
 2. Open the **Customiser** panel: View → Customiser.
-3. Adjust your settings:
-   - **Needle count** (25 or custom)
-   - **Gauge** (4.5mm, 6.5mm, 9mm, or custom)
-   - **Screw family** (#4-40, M3 or custom)
-   - **Threaded inserts** (on/off)
-   - **Part toggles** (select which to render: needlebed assembly, yarn carrier, carriage, etc.)
-4. Click **Preview** (F5) to check, then **Render** (F6) for final output.
+3. Adjust your settings: See below
 5. Export: `File → Export → Export as STL`.
 
 **Command-line export:**
@@ -251,12 +244,28 @@ All of the following options can be adjusted in the OpenSCAD Customiser panel �
 
 | Parameter | Options | Notes |
 |---|---|---|
+| **Tolerance** | Custom numeric value | Global fit/clearance allowance |
 | **Needle count** | 25 or custom | How many needles per bed |
 | **Gauge** | 4.5mm (standard), 6.5mm (mid), 9mm (bulky), or custom | Needle spacing |
 | **Screw family** | Imperial (#4-40), Metric (M3), or custom | Select once; applies to whole assembly |
-| **Threaded inserts** | On / Off | Generates insert pockets in parts like the clamp unit |
-| **Part toggles** | Needlebed assembly, Yarn carrier assembly, Carriage assembly, Clamp unit assembly | Can render only the parts you need |
+| **Custom screw diameter** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom screw head diameter** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom screw head height** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom nut height** | Custom numeric value | Used when screw family is `Custom` |
 | **Screw preview** | On / Off | Visualise screw sizing before exporting |
+| **Threaded inserts** | On / Off | Generates insert pockets in supported parts |
+| **Insert outer diameter** | Custom numeric value | Threaded insert pocket diameter |
+| **Insert length** | Custom numeric value | Threaded insert pocket depth |
+| **Insert lead-in diameter** | Custom numeric value | Diameter of the insert lead-in |
+| **Insert lead-in depth** | Custom numeric value | Depth of the insert lead-in |
+| **Screw placement** | Custom numeric value | How many needles in from each end the screw columns are placed |
+| **Needlebed assembly toggle** | On / Off | Master toggle for the needlebed assembly |
+| **Needlebed part toggle** | On / Off | Render the needlebed body |
+| **Back cover part toggle** | On / Off | Render the back cover |
+| **Sponge bar part toggle** | On / Off | Render the sponge bar |
+| **Carriage rests part toggle** | On / Off | Render the carriage rests |
+| **Clamp unit part toggle** | On / Off | Render the clamp unit |
+| **Yarn carrier assembly toggle** | On / Off | Master toggle for the yarn carrier assembly |
 
 Adjusting these parameters and exporting new STLs requires **no changes to your SCAD source files**.
 
