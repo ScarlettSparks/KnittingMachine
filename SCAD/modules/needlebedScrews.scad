@@ -1,64 +1,83 @@
 include<params.scad>;
-//include<needlebed.scad>;
 
-module screwHoles(screw) {
-    
-    
-    // "screw" is passed in during the loop to place holes at either end of the assembly
-    if (screw > 0) { //left half
-       // spongebar screw
-       translate([gauge/2,-(NEEDLE_BED_DEPTH-COMB) + SPONGE_BAR/2, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25); 
-         translate([0,0,railHeight]) 
-             cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }
-       // back screw, back cover
-       translate([gauge/2, -5, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25);
-                cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }    
-         // front screw, back cover
-       translate([gauge/2, -BACK_COVER + 5, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25);  
-          cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }
-     }
-     
-     if (screw < 0) { //right half
-       // spongebar screw
-       translate([-gauge/2,-(NEEDLE_BED_DEPTH-COMB) + SPONGE_BAR/2, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25); 
-         translate([0,0,railHeight]) 
-             cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }
-       // back screw, back cover
-       translate([-gauge/2, -5, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25);
-                cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }    
-         // front screw, back cover
-       translate([-gauge/2, -BACK_COVER + 5, 0]) {
-         cylinder(h = needleBedHeight*2 + 1, d = screwDiamSm, center = true, $fn = 25);  
-          cylinder(h = screwHeadHeight*2 + tolerance, d = screwHeadDiamSm, center = true, $fn = 25);   
-       }
-     }
-  
+function needleBedSpongeBarInsertOffset() =
+    (railHeight + 2 + spongeBarThickness + spongeThickness) - (screwHeadHeight + (tolerance *2));
+
+function needleBedBackCoverInsertOffset() =
+    (railHeight + tolerance) - (screwHeadHeight) + needleSlotHeight;
+
+module needleBedSpongeBarScrewHoleLocations(side = "both") {
+    if (side == "left" || side == "both") {
+        translate([gauge/2,-(NEEDLE_BED_DEPTH-COMB) + SPONGE_BAR/2, 0])
+        children();
+    }
+
+    if (side == "right" || side == "both") {
+        translate([-gauge/2,-(NEEDLE_BED_DEPTH-COMB) + SPONGE_BAR/2, 0])
+        children();
+    }
 }
 
-//screwHoles(screw = 1);
-module needleBedScrews() {
+module needleBedBackCoverScrewHoleLocations(side = "both") {
+    if (side == "left" || side == "both") {
+        translate([gauge/2, -BACK_COVER/2, 0])
+        children();
+    }
+
+    if (side == "right" || side == "both") {
+        translate([-gauge/2, -BACK_COVER/2, 0])
+        children();
+    }
+}
+
+module needleBedScrewPositionColumns(side = "both") {
     for(i = [0:numNeedles-1]) {
         if (i==screwPlacement || i==numNeedles-screwPlacement) {
-              translate([gauge*i, 0, 0]) {
-              screwHoles(screw = -1); 
-              }
-        } else if (i == screwPlacement - 1 || i==numNeedles-(screwPlacement + 1)) {
-            //LS screw holes
+            if (side == "right" || side == "both") {
                 translate([gauge*i, 0, 0])
-                screwHoles(screw = 1);  
+                children();
+            }
+        } else if (i == screwPlacement - 1 || i==numNeedles-(screwPlacement + 1)) {
+            if (side == "left" || side == "both") {
+                translate([gauge*i, 0, 0])
+                children();
+            }
         }
     }
 }
 
-needleBedScrews() {
+module needleBedSpongeBarScrewPositions(side = "both") {
+    if (side == "left" || side == "both") {
+        needleBedScrewPositionColumns(side = "left")
+        needleBedSpongeBarScrewHoleLocations(side = "left")
+        children();
+    }
+
+    if (side == "right" || side == "both") {
+        needleBedScrewPositionColumns(side = "right")
+        needleBedSpongeBarScrewHoleLocations(side = "right")
+        children();
+    }
+}
+
+module needleBedBackCoverScrewPositions(side = "both") {
+    if (side == "left" || side == "both") {
+        needleBedScrewPositionColumns(side = "left")
+        needleBedBackCoverScrewHoleLocations(side = "left")
+        children();
+    }
+
+    if (side == "right" || side == "both") {
+        needleBedScrewPositionColumns(side = "right")
+        needleBedBackCoverScrewHoleLocations(side = "right")
+        children();
+    }
+}
+
+module needleBedScrewPositions(side = "both") {
+    needleBedSpongeBarScrewPositions(side = side)
+    children();
+
+    needleBedBackCoverScrewPositions(side = side)
+    children();
 }

@@ -1,12 +1,12 @@
 include<../modules/params.scad>;
 include<../modules/camplate_coords_mk2.scad>;
 include<../modules/utils.scad>;
-use<../parts/backCover.scad>;
-use<../parts/spongeBar.scad>;
-include<../parts/tPointer.scad>;
+use<../modules/backCover.scad>;
+use<../modules/spongeBar.scad>;
+include<../modules/tPointer.scad>;
 include<../modules/carriageScrews.scad>;
-use<../parts/tCam.scad>;
-include<../parts/backPlate.scad>;
+use<../modules/tCam.scad>;
+include<../modules/backPlate.scad>;
 
 
 /* 

@@ -1,3 +1,5 @@
+# WIP - Experimental changes
+
 # A 3D-printable flatbed knitting machine
 
 ## Contents
@@ -23,14 +25,16 @@ Please keep in mind that this is a passion project and a work-in-progress, not a
 
 In this project, you will find several types of file:
 
-1. In the **STL** directory you can find pre-compiled models of parts with the default settings, ready to be sliced for 3D printing. If you're not interested in customizing or tinkering and just want to start printing parts, open this folder and skip to the next section, [How to build the machine](#how-to-build-the-machine).
+1. In the **STL** directory you can find pre-compiled models of parts with the default settings, ready to be sliced for 3D printing. If you're not interested in customising or tinkering and just want to start printing parts, open this folder and skip to the next section, [How to build the machine](#how-to-build-the-machine).
 
-1. The **SCAD** directory contains the modelling code, which can be viewed and edited in [OpenSCAD](https://openscad.org/). This code is divided into:
-    - **parts** files, each of which can render and export a single component (or in some cases, pairs of components which are meant to be printed together);
-    - **assemblies**, which help visualize how the components will fit together; and
-    - **modules**, utility code and parameters which are shared across multiple parts and assemblies.
-
-        - If you want or need to make changes, the key parameters are in **modules/params.scad**. Values that are open to tweaking are named in ```camelCase```; for example, you may want to change the number of needles in a bed, set a custom spacing between needles, adjust the size of screw holes, or fine-tune the tolerances. (Note that you will also need to open individual parts files to view and export your updated models after saving the changes in **params.scad**.) However, you should avoid changing values marked as constants in ```SCREAMING_SNAKE_CASE```. These are carefully calibrated to the needle dimensions and should generally not be changed without also adjusting the cam design and associated SVG assets to compensate. I DO NOT recommend you make changes to the cam layout unless you are very familiar with the project and committed to doing A LOT of testing.
+1. The **SCAD** directory contains all modelling code. Start with **[SCAD/customiserFullAssembly.scad](SCAD/customiserFullAssembly.scad)** — this is your primary entry point. You do not need to edit SCAD files to customise your machine:
+    - **Customiser parameters** (set in the OpenSCAD Customiser panel):
+      - Needle count & gauge (4.5mm standard, 6.5mm, 9mm, custom).
+      - Screw family (imperial #4-40, metric M3, custom).
+      - Threaded inserts (toggle on/off).
+      - Part toggles (select which components to render/export).
+    - The underlying code is organized into **parts** (individual render modules), **assemblies** (multi-part groupings), and **modules** (shared utilities).
+    - **Do not edit `SCAD/modules/params.scad`** unless you understand the consequences: values marked in `SCREAMING_SNAKE_CASE` are calibrated to needle geometry and cam design.
 
 1. The **SVG** directory contains 2D shape assets exported from the technical drawings, which are imported by the SCAD files and extruded into 3D parts such as cams, etc. You shouldn't need to access or modify these files directly.
 
@@ -44,7 +48,12 @@ In this project, you will find several types of file:
 
 A table of printable parts along with suggested slicer settings can be found below, based on my own tests slicing in Cura and printing with PLA/PLA Pro filament on an Ender 3 V2; note that times and filament weights given are estimates and your experience may vary depending on your printer and slicer. A list of other required hardware, supplies and tools is also provided below.
 
-The needlebed in the provided STL files holds 25 needles at a standard (4.5mm) gauge; if you want a bed with a different number or spacing of needles, these parameters can be changed in **SCAD/modules/params.scad**; you will then need to export the updated models from **needlebed.scad**, **backCover.scad**, and **spongeBar.scad** in **SCAD/parts/**. Multiple needlebeds can be connected in series to create a wider work area. 
+The needlebed in the provided STL files holds 25 needles at a standard (4.5mm) gauge. To customise:
+- **Needle count / gauge**: open [SCAD/customiserFullAssembly.scad](SCAD/customiserFullAssembly.scad), set your values in the Customiser panel, and export.
+- **Screw specifications**: select imperial, metric, or custom.
+- All exports happen through the single customiser file; no individual part files need to be edited.
+
+Multiple needlebeds can be connected in series to create a wider work area.
 
 **Please note** that knitting machine needles are not all interchangeable, and this machine has been designed to work with a specific model: when sourcing your needles please look for those intended to work with Brother models KR830 / KR838 / KR850.
 
@@ -65,12 +74,9 @@ You will need to print:
 
 You will also need:
 
-- latch-hook knitting machine needles (KR830 / KR838 / KR850), one per  needlebed slot for each bed
+- latch-hook knitting machine needles (KR830 / KR838 / KR850), one per needlebed slot for each bed
 - self-adhesive foam weatherstrip (or similar; for sponge bar), 1/4" - 3/8" wide, enough length to span all connected needlebeds, plus a small trimming allowance
-- round head machine screws: 
-    * #4-40 x 1/2", 4 per needlebed (for back cover)
-    * #4-40 x 3/4", 2 per needlebed (for sponge bar)
-    * #6-32 x 1/2", 8 (for carriage rests/clamps)
+- machine screws: choose your preferred family — **imperial** (#4-40), **metric** (M3), or **custom**; see the recommended lengths in [Fastener specifications](#fastener-specifications).
 - screwdriver
 - scissors or utility knife (to cut foam weatherstrip)
 - NOTE: I have been using a 5/16" x 3.5" metal eyebolt in the clamp; the eye is easy to grab and turn without a tool, but not essential. You will need a longer bolt if you choose the "deep" clamp option. If you choose to generate 3D printed bolts for your clamp with an external library, a bolt with an 8mm OD and 12mm nut (between flats) should fit the other connected parts.
@@ -78,14 +84,14 @@ You will also need:
 For each needlebed:
 
 1. Insert a needle into each slot with the hook end towards the angled edge of the bed; ensure needles are sliding smoothly (sand any imperfections if necessary).
-2. Screw back cover to rear of needlebed with #4-40 x 1/2" screws (in any orientation; it's symmetrical). Ensure screw heads are sunk in the well below the surface of the cover but be careful not to overtighten.
+2. Screw back cover to rear of needlebed using the assembly screw family. Ensure screw heads are sunk in the well below the surface of the cover but be careful not to overtighten.
 3. Cut and apply foam strip to fit the flat underside of the sponge bar; make a cut through the foam strip at the position of each screw hole for the screw to pass through.
-4. Screw sponge bar into place with #4-40 x 3/4" screws, taking care that the foam strip doesn't get caught between the spacer and the cover; once in place, the sponge bar should be flush with the surface of the rest of the needlebed. Once again, ensure the screw heads do not protrude, but avoid overtightening.
+4. Screw sponge bar into place with the assembly screw family, taking care that the foam strip doesn't get caught between the spacer and the cover; once in place, the sponge bar should be flush with the surface of the rest of the needlebed. Once again, ensure the screw heads do not protrude, but avoid overtightening.
 
 For each carriage rest:
 
 1. Remove 3D printing supports, sanding any resulting rough surfaces if needed. 
-2. Screw the clamp to the bottom of the carriage rest with #6-32 x 1/2" screws, ensuring that the surfaces are flush.
+2. Screw the clamp to the bottom of the carriage rest using the assembly screw family, ensuring that the surfaces are flush.
 3. Insert the clamp nut into the hexagonal cutout in the clamp, and the bolt from the opposite side; once the bolt has cleared the nut, insert the tip of the bolt into the clamp head, and (when all beds are connected) tighten to the table. (You may choose to glue or otherwise permanently affix the nut and the clamp head; I keep mine separate since they are a tight fit around my table.)
 
 To connect the carriage rests and beds:
@@ -98,16 +104,11 @@ You will need to print:
 
 - back plate
 - 2x tension cams, mirrored
-- 2x tension pointers
+- 2x tension pointers, mirrored
 - yarn carrier
 - yarn feeder 
 - stripper plate (2pc.)
-- round head machine screws:
-    * 4x #6-32 x 1/2"
-    * 6x #4-40 x 1/2"
-    * 6x #4-40 x 1/4"
-    * 2x #4-40 nuts
-    * 2x #4 washers
+ - machine screws: choose your preferred family — **imperial** (#4-40), **metric** (M3), or **custom**.
 
 You will also need:
 - pliable jewelry wire, approx. 6-7" (15-18cm)
@@ -119,9 +120,9 @@ You will also need:
 
 
 1. Remove any 3D printing supports and sand any resulting rough surfaces, if needed. 
-2. For each tension cam: with the flat side of the back plate down, insert the tension cam's pivot point into the hole; the nut side of the cam will be against the plate in the region of the arc-shaped cutout. Holding the cam in place, flip the assembly over (flat side facing you) and screw the round end of a tension pointer to the underside of the cam pivot, with a #4-40 x 1/4" screw. Insert a washer between the pointer and the plate, and connect the pointer, washer, plate and tension cam with a #4-40 x 1/2" screw.
-3. With the angled face of the yarn carrier cover facing down and the cone-shaped side of the yarn feeder facing up, screw the two parts together using #4-40 x 1/4" screws. Flip the yarn carrier assembly over and align the stripper plate pieces under the opposite edge, so that the points of the stripper plate form a small gap under the yarn feeder hole; screw into place with #4-40 x 1/2" screws. 
-12. With the flat side of the camplate facing up, align the yarn carrier assembly with the screw holes at the front edge of the camplate (closest to the hold position). Screw into place with #6-32 screws.
+2. For each tension cam: with the flat side of the back plate down, insert the tension cam's pivot point into the hole; the nut side of the cam will be against the plate in the region of the arc-shaped cutout. Holding the cam in place, flip the assembly over (flat side facing you) and screw the round end of a tension pointer to the underside of the cam pivot using the assembly screw family. Insert a washer between the pointer and the plate, and connect the pointer, washer, plate and tension cam using the same screw family.
+3. With the angled face of the yarn carrier cover facing down and the cone-shaped side of the yarn feeder facing up, screw the two parts together using the assembly screw family. Flip the yarn carrier assembly over and align the stripper plate pieces under the opposite edge, so that the points of the stripper plate form a small gap under the yarn feeder hole; screw into place using the assembly screw family.
+12. With the flat side of the camplate facing up, align the yarn carrier assembly with the screw holes at the front edge of the camplate (closest to the hold position). Secure using the assembly screw family.
 13. Create a yarn guide with the jewelry wire by coiling around a small cylinder 3 times; form one end of the coil into a small loop (or otherwise finish the cut edge according to your preference). Form the other end into a flat loop or coil, and wrap around a #6-32 screw; secure the yarn guide with the screw in the middle hole at the back of the carriage, and bend into your preferred position to guide the yarn towards the yarn feeder.
 
 ## Basic use
@@ -201,6 +202,72 @@ When storing the needlebeds, be cautious of the needle hooks and latches; they c
 
 
 ## 3D printed parts and slicer settings
+
+### Fastener specifications
+
+All screw specifications are customizable in [SCAD/customiserFullAssembly.scad](SCAD/customiserFullAssembly.scad). The customiser supports:
+- **Imperial screw family** (#4-40)
+- **Metric screw family** (M3)
+- **Custom sizes** (set diameter and pitch as needed)
+- **Threaded-insert toggles** (for hardware-ready assembly)
+
+**Default recommended lengths:**
+
+| Part | Length (imperial) | Length (metric) | Notes |
+|---|---|---|---|
+| Yarn feeder / small covers | 1/4" | 6mm | |
+| Back plate / Back cover | 1/2" | 12mm | |
+| Tension cams / pointers | 1/2" | 12mm | |
+| Stripper plate | 1/2" | 12mm | |
+| Carriage rest clamps | 1/2" | 12mm | Use longer for deep clamp option |
+| Sponge bar | 3/4" | 18mm | |
+
+### Workflow: customise, preview, and export
+
+**In OpenSCAD GUI:**
+
+1. Open `SCAD/customiserFullAssembly.scad`.
+2. Open the **Customiser** panel: View → Customiser.
+3. Adjust your settings: See below
+5. Export: `File → Export → Export as STL`.
+
+**Command-line export:**
+```bash
+openscad -o my_needlebed.stl SCAD/customiserFullAssembly.scad
+```
+
+**Key benefit**: everything is in one customiser file — no need to edit individual part files or `params.scad` to customise and export.
+
+### Available customiser parameters
+
+All of the following options can be adjusted in the OpenSCAD Customiser panel — **no SCAD code editing required**:
+
+| Parameter | Options | Notes |
+|---|---|---|
+| **Tolerance** | Custom numeric value | Global fit/clearance allowance |
+| **Needle count** | 25 or custom | How many needles per bed |
+| **Gauge** | 4.5mm (standard), 6.5mm (mid), 9mm (bulky), or custom | Needle spacing |
+| **Screw family** | Imperial (#4-40), Metric (M3), or custom | Select once; applies to whole assembly |
+| **Custom screw diameter** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom screw head diameter** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom screw head height** | Custom numeric value | Used when screw family is `Custom` |
+| **Custom nut height** | Custom numeric value | Used when screw family is `Custom` |
+| **Screw preview** | On / Off | Visualise screw sizing before exporting |
+| **Threaded inserts** | On / Off | Generates insert pockets in supported parts |
+| **Insert outer diameter** | Custom numeric value | Threaded insert pocket diameter |
+| **Insert length** | Custom numeric value | Threaded insert pocket depth |
+| **Insert lead-in diameter** | Custom numeric value | Diameter of the insert lead-in |
+| **Insert lead-in depth** | Custom numeric value | Depth of the insert lead-in |
+| **Screw placement** | Custom numeric value | How many needles in from each end the screw columns are placed |
+| **Needlebed assembly toggle** | On / Off | Master toggle for the needlebed assembly |
+| **Needlebed part toggle** | On / Off | Render the needlebed body |
+| **Back cover part toggle** | On / Off | Render the back cover |
+| **Sponge bar part toggle** | On / Off | Render the sponge bar |
+| **Carriage rests part toggle** | On / Off | Render the carriage rests |
+| **Clamp unit part toggle** | On / Off | Render the clamp unit |
+| **Yarn carrier assembly toggle** | On / Off | Master toggle for the yarn carrier assembly |
+
+Adjusting these parameters and exporting new STLs requires **no changes to your SCAD source files**.
 
 |Part              |#  |Mirroring  |Orientation              |Layer height          |Supports?                  |Infill|Z-seam alignment|Initial layer horizontal expansion  |Print time (est.)|Weight (est., g)|Metres (est.)|
 |------------------|---|-----------|-------------------------|----------------------|---------------------------|------|----------------|------------------------------------|-----------------|----------------|-------------|
