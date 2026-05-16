@@ -76,6 +76,12 @@ connectorOffset = 20;
 
 screwPlacement = 3; // how many needles from edge of bed; min 2, max floor(numNeedles/2)
 
+poleDiameter = 4.5; //0.1
+poleHeight = 60; // 
+knotchWidth = 6; //0.1
+knotchDepth = 1.5; //0.1
+wallThickness = 4; //0.5
+
 // ---
 // Carriage dimensions
 // refer to technical sketch
